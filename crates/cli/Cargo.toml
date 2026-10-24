@@ -1,0 +1,11 @@
+[package]
+name = "swapboost"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Read-only memory diagnostics for Windows and Linux"
+[dependencies]
+swapboost-core = { path = "../core" }
+swapboost-platform = { path = "../platform" }
+serde_json.workspace = true
+clap = { version = "4", features = ["derive"] }
