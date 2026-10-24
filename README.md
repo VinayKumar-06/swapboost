@@ -1,12 +1,35 @@
 # SwapBoost
 
+![SwapBoost: understand memory pressure before changing anything](docs/images/hero.svg)
+
 **Understand memory pressure before changing anything.**
 
 [![CI](https://github.com/VinayKumar-06/swapboost/actions/workflows/ci.yml/badge.svg)](https://github.com/VinayKumar-06/swapboost/actions/workflows/ci.yml)
 
 SwapBoost is an MIT-licensed, local, read-only memory diagnostic CLI for Windows and Linux. Version 0.1 is an early foundation, not an automatic optimizer or a performance guarantee. It does not create physical RAM, clear caches, allocate swap, edit settings, or require administrator access.
 
-## Get started
+## Start here
+
+**[Download v0.1 preview](https://github.com/VinayKumar-06/swapboost/releases/tag/v0.1.0)** · **[Picture-by-picture setup guide](docs/quickstart.md)** · **[Report a bug](https://github.com/VinayKumar-06/swapboost/issues/new?template=bug_report.yml)**
+
+| Windows (Intel/AMD 64-bit) | Linux (Intel/AMD 64-bit) |
+| --- | --- |
+| [Download ZIP](https://github.com/VinayKumar-06/swapboost/releases/download/v0.1.0/swapboost-windows-x86_64.zip) | [Download tar.gz](https://github.com/VinayKumar-06/swapboost/releases/download/v0.1.0/swapboost-linux-x86_64.tar.gz) |
+| Extract → open PowerShell in the folder | Extract → open a terminal in the folder |
+| `.\swapboost.exe status` | `./swapboost status` |
+
+No installer, administrator access, or Rust compiler is required for these downloads. This is a **terminal app**: run it from PowerShell or a terminal instead of double-clicking. The preview is unsigned. Linux builds target the Ubuntu runner's libraries; older distributions may need a source build. macOS monitoring and ARM prebuilt downloads are not supported.
+
+![Four example readings with guidance: pressure is distinct from available RAM. Illustration, not live data.](docs/images/04-read.svg)
+
+### Why try it?
+
+- **Understand first:** see available RAM, commit, and supported paging metrics together.
+- **Observe safely:** no cache clearing, configuration changes, or network telemetry.
+- **Know what is missing:** unsupported measurements are clearly labeled.
+- **Use your own workflow:** readable terminal reports or JSON for scripts.
+
+### Build from source
 
 Install [Rust stable](https://rustup.rs/) and Git, then:
 
@@ -16,12 +39,9 @@ cd swapboost
 cargo install --locked --path crates/cli
 swapboost status
 swapboost monitor --interval 2 --count 30
-swapboost diagnose --json
 ```
 
-On Windows, Rust's installation may require Microsoft's C++ build tools. Run commands in a new terminal after installation. If the installed command is not found, use `cargo run -p swapboost -- status` from the repository.
-
-Successful Linux and Windows [CI runs](https://github.com/VinayKumar-06/swapboost/actions) also provide executable ZIP/tar artifacts with SHA-256 checksums. These are development builds, require a GitHub login to download, and are not signed installers. Extract the archive and run `./swapboost status` on Linux or `.\swapboost.exe status` in Windows PowerShell. Linux builds target the Ubuntu runner's runtime libraries; older distributions may need to build from source. Public versioned release downloads are not yet published.
+Windows builds may require Microsoft's C++ build tools. If `swapboost` is not found after installation, reopen the terminal or run `cargo run -p swapboost -- status` from the repository.
 
 ## Commands
 
@@ -80,3 +100,9 @@ CI runs these checks plus actual OS collection smoke tests on Linux and Windows.
 - Consider opt-in adaptation only after comparative evidence and failure testing.
 
 Configuration apply/rollback, stress benchmarks, GUI, automatic optimization, and signed releases are **not implemented**. No benchmark improvements are claimed.
+
+## Help shape SwapBoost
+
+Try it during a normal workload, then [report a reproducible issue](https://github.com/VinayKumar-06/swapboost/issues/new?template=bug_report.yml) or [suggest an improvement](https://github.com/VinayKumar-06/swapboost/issues/new?template=feature_request.yml). Documentation fixes, accessibility feedback, and platform testing are welcome. See [Contributing](CONTRIBUTING.md).
+
+If it is useful, a star helps you find the project again, and sharing the repository with someone who needs memory diagnostics helps it reach the right users. Please describe it as a read-only diagnostic preview, not a RAM booster. [Ready-to-use project introduction](docs/share.md).

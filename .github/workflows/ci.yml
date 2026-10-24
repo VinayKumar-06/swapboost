@@ -25,6 +25,7 @@ jobs:
         run: |
           mkdir dist
           cp target/release/swapboost LICENSE README.md dist/
+          cp -R docs dist/
           tar -czf swapboost-linux-x86_64.tar.gz -C dist .
           sha256sum swapboost-linux-x86_64.tar.gz > swapboost-linux-x86_64.sha256
       - name: Package Windows executable
@@ -33,6 +34,7 @@ jobs:
         run: |
           New-Item -ItemType Directory -Path dist
           Copy-Item target/release/swapboost.exe,LICENSE,README.md dist/
+          Copy-Item docs dist/ -Recurse
           Compress-Archive -Path dist/* -DestinationPath swapboost-windows-x86_64.zip
           $hash = (Get-FileHash swapboost-windows-x86_64.zip -Algorithm SHA256).Hash.ToLower()
           "$hash  swapboost-windows-x86_64.zip" | Out-File -Encoding ascii swapboost-windows-x86_64.sha256
@@ -44,3 +46,28 @@ jobs:
             swapboost-*.tar.gz
             swapboost-*.zip
             swapboost-*.sha256
+  preview-release:
+    name: Publish tested v0.1 preview
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: swapboost-preview-release
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - name: Publish first preview only
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_COMMIT: ${{ github.sha }}
+        run: |
+          if gh release view v0.1.0 >/dev/null 2>&1; then
+            echo "v0.1.0 already exists; preserving its original artifacts."
+            exit 0
+          fi
+          gh release create v0.1.0 artifacts/* --target "$RELEASE_COMMIT" --prerelease --title "SwapBoost v0.1.0 — read-only preview" --notes "Read-only memory reporting for Windows and Linux, a clearer terminal report, JSON output, and Linux PSI diagnosis. All CI jobs passed before publication. Download your OS archive below and extract it. Run swapboost status from a terminal; see the illustrated quickstart in the repository. SHA-256 checksums are included. These executables are unsigned. Linux binaries target the Ubuntu build runner; older distributions may need a source build. No automatic tuning, page-file changes, or performance guarantees."

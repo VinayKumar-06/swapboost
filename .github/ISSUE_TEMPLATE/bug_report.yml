@@ -1,0 +1,31 @@
+name: Bug report
+description: Help reproduce a problem with SwapBoost
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: "Please remove private information from logs. For security vulnerabilities, see SECURITY.md."
+  - type: input
+    id: environment
+    attributes:
+      label: Operating system and SwapBoost version
+      placeholder: "Windows 11 x64, SwapBoost 0.1.0"
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Command and steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected behavior and actual result
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error text (optional; redact private details)
+      render: text
